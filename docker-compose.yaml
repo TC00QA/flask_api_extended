@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+  back-end:
+    build: ./back-end
+
+  colour-api:
+
+    build: ./colour-api
+
+  personality-api:
+
+    build: ./personality-api
+
+  front-end:
+
+    build: ./front-end
+    
+    depends_on:
+      - colour-api
+      - personality-api
+
+  nginx:
+    
+    ports:
+    - target: 80
+      published: 80
+      protocol: tcp  
+    
+    image: nginx:latest
+    
+    volumes:
+    - type: bind
+      source: ./nginx/nginx.conf
+      target: /etc/nginx/nginx.conf
+    
+    depends_on:
+      - front-end
